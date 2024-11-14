@@ -1,8 +1,7 @@
 import { AppBskyActorDefs } from "@atproto/api"
-import { kv } from "@vercel/kv"
 import { Check, X } from "lucide-react"
 
-import { getAgent } from "@/lib/atproto"
+import { agent } from "@/lib/atproto"
 import { prisma } from "@/lib/db"
 import { hasExplicitSlur } from "@/lib/slurs"
 import { Button } from "@/components/ui/button"
@@ -39,7 +38,6 @@ export default async function IndexPage({
 
   if (handle) {
     try {
-      const agent = await getAgent()
       if (!handle.includes(".")) {
         handle += ".bsky.social"
       }
@@ -70,6 +68,11 @@ export default async function IndexPage({
             if (hasExplicitSlur(handle)) {
               throw new Error("slur")
             }
+
+            if (domain === "army.social" && RESERVED.includes(handle)) {
+              throw new Error("reserved")
+            }
+
             const existing = await prisma.user.findFirst({
               where: { handle },
               include: { domain: true },
@@ -136,13 +139,13 @@ export default async function IndexPage({
               </p>
               {error1 && (
                 <p className="flex flex-row items-center gap-2 text-sm text-red-500">
-                  <X className="h-4 w-4" /> Handle not found - please try again
+                  <X className="size-4" /> Handle not found - please try again
                 </p>
               )}
               {profile && (
                 <>
                   <p className="text-muted-forground mt-4 flex flex-row items-center gap-2 text-sm">
-                    <Check className="h-4 w-4 text-green-500" /> Account found
+                    <Check className="size-4 text-green-500" /> Account found
                   </p>
                   <Profile profile={profile} className="mt-4" />
                 </>
@@ -163,7 +166,7 @@ export default async function IndexPage({
                 />
                 <Button type="submit">Submit</Button>
               </div>
-              <p className="text-sm text-muted-foreground ">
+              <p className="text-sm text-muted-foreground">
                 Enter the {domain} handle that you would like to have, not
                 including the @
               </p>
@@ -176,6 +179,8 @@ export default async function IndexPage({
                       case "invalid handle":
                       case "slur":
                         return "Invalid handle - please enter a different handle"
+                      case "reserved":
+                        return "Reserved handle - please enter a different handle"
                       default:
                         return "An error occured - please try again"
                     }
@@ -209,3 +214,49 @@ export default async function IndexPage({
     </main>
   )
 }
+
+const RESERVED = [
+  "Jungkook",
+  "JeonJungkook",
+  "Jeon",
+  "JK",
+  "JJK",
+  "Kim",
+  "KimTaehyung",
+  "V",
+  "Taehyung",
+  "Tae",
+  "Jin",
+  "Seokjin",
+  "KimSeokjin",
+  "RM",
+  "Namjoon",
+  "Nam",
+  "KimNamjoon",
+  "MinYoongi",
+  "Yoongi",
+  "Yoon",
+  "AgustD",
+  "MYG",
+  "Suga",
+  "PJM",
+  "Jimin",
+  "ParkJimin",
+  "Park",
+  "Abcdefghi__lmnopqrsvuxyz",
+  "JM",
+  "UarMyHope",
+  "Rkrive",
+  "THV",
+  "KTH",
+  "SBT",
+  "BANGPD",
+  "projeto",
+  "army",
+  "armys ",
+  "info",
+  "projects",
+  "Pic",
+  "New",
+  "Babys",
+].map((x) => x.toLowerCase())

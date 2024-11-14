@@ -25,7 +25,7 @@ export default function CommunityPage() {
         </h1>
         <p className="max-w-[700px] text-lg text-muted-foreground sm:text-xl">
           Want a custom community handle for your community, like
-          @alex.bsky.london, @jay.swifties.social, or @jane.bsky.paris? Follow
+          @alex.swifties.social, @jay.army.social, or @jane.kawaii.social? Follow
           these steps to get one.
         </p>
       </div>
@@ -46,9 +46,7 @@ export default function CommunityPage() {
           </p>
         </Stage>
         <Stage title="Host the Community Handles tool" number={2} last>
-          <p className="max-w-lg">
-            You then need to host the tool.
-          </p>
+          <p className="max-w-lg">You then need to host the tool.</p>
           <p className="mt-4 max-w-lg">
             If you want to host it yourself,{" "}
             <a
@@ -59,7 +57,7 @@ export default function CommunityPage() {
             </a>
             . It{"'"}s a Next.js project, so you can deploy it however you like.
             Check out the README for the recommended solution, using Vercel and
-            Vercel KV.
+            Railway.
           </p>
           <p className="mt-8 max-w-lg text-sm text-muted-foreground">
             Using the hosted version? (no longer available){" "}
